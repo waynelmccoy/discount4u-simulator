@@ -291,6 +291,8 @@ def update_unlock_weeks(selected, icontrol):
         raise PreventUpdate
     allowed = {str(w): (str(w) in set(selected or [])) for w in range(2,8)}
     icontrol["unlocked_weeks"] = allowed
+    with GLOBAL_LOCK:
+        GLOBAL_CONTROL["unlocked_weeks"] = allowed
     return icontrol
 
 @callback(
@@ -420,5 +422,5 @@ def save_notes(n, notes, sim_state):
     return sim_state
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8050))
-    app.run(host="0.0.0.0", port=port, debug=False)
+    app.run(debug=True)
+
