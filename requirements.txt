@@ -1,0 +1,7 @@
+# Core
+dash>=2.11
+pandas>=1.5
+numpy>=1.23
+plotly>=5.15
+# Deployment (optional)
+gunicorn>=20.1

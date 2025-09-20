@@ -1,0 +1,7 @@
+
+.dash-table-container .dash-spreadsheet-container { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.dash-table-container .dash-spreadsheet-inner { font-size: 0.92rem; }
+.dash-spreadsheet-menu { border-bottom: 1px solid var(--border); }
+.dash-table-container .dash-spreadsheet td, .dash-table-container .dash-spreadsheet th { border: none !important; }
+.dash-table-container .dash-spreadsheet tr:nth-child(odd) td { background: #fafafa; }
+.dash-table-container .dash-spreadsheet tr:hover td { background: #f3f4f6; }
