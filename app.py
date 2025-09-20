@@ -33,7 +33,7 @@ app.layout = html.Div([
             html.Button("Display Data", id="start-btn", className="start-btn"),
             dcc.Store(id="data-store"),
             dcc.Store(id="sim-state", storage_type="local"),
-            dcc.Store(id="instructor-control", storage_type="local"),
+            dcc.Store(id="instructor-control", storage_type="session"),
             dcc.Store(id="active-event"),
         dcc.Interval(id="poll-unlock", interval=4000, n_intervals=0),
             dcc.Download(id="download-raw"),
@@ -291,8 +291,6 @@ def update_unlock_weeks(selected, icontrol):
         raise PreventUpdate
     allowed = {str(w): (str(w) in set(selected or [])) for w in range(2,8)}
     icontrol["unlocked_weeks"] = allowed
-    with GLOBAL_LOCK:
-        GLOBAL_CONTROL["unlocked_weeks"] = allowed
     return icontrol
 
 @callback(
@@ -423,3 +421,4 @@ def save_notes(n, notes, sim_state):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
