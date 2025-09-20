@@ -13,8 +13,6 @@ from events_config import EVENTS
 from events_engine import apply_transform
 from dash import callback
 import threading
-GLOBAL_CONTROL = {"unlocked_weeks": {str(w): False for w in range(2,8)}}
-GLOBAL_LOCK = threading.Lock()
 
 
 app = Dash(__name__, suppress_callback_exceptions=True)
@@ -33,7 +31,7 @@ app.layout = html.Div([
             html.Button("Display Data", id="start-btn", className="start-btn"),
             dcc.Store(id="data-store"),
             dcc.Store(id="sim-state", storage_type="local"),
-            dcc.Store(id="instructor-control", storage_type="session"),
+            dcc.Store(id="instructor-control", storage_type="local"),
             dcc.Store(id="active-event"),
         dcc.Interval(id="poll-unlock", interval=4000, n_intervals=0),
             dcc.Download(id="download-raw"),
@@ -286,12 +284,13 @@ def set_instructor_role(n, pin, icontrol):
     State("instructor-control", "data"),
     prevent_initial_call=True
 )
-def update_unlock_weeks(selected, icontrol):
+def update_unlock_weeks(selected, icontrol, sim_state):
     if not icontrol or icontrol.get("role") != "instructor":
         raise PreventUpdate
     allowed = {str(w): (str(w) in set(selected or [])) for w in range(2,8)}
     icontrol["unlocked_weeks"] = allowed
-    return icontrol
+    sim_state["unlocked_weeks"] = allowed
+    return icontrol, sim_state
 
 @callback(
     Output({"type": "week-btn", "week": ALL}, "disabled"),
@@ -421,5 +420,4 @@ def save_notes(n, notes, sim_state):
 
 if __name__ == "__main__":
     app.run(debug=True)
-
 
